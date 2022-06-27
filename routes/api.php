@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\UrlShorterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,16 +13,10 @@ use App\Http\Controllers\ItemController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('add-item', [ItemController::class, 'addItem']);
+Route::get('/surl/{hash}', [UrlShorterController::class, 'getDestinationUrl']);
+Route::post('/add-url', [UrlShorterController::class, 'addUrl']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/items', [ItemController::class, 'index']);
-Route::prefix('/item')->group(function(){
-        Route::post('/store', [ItemController::class, 'store']);
-        Route::put('/{id}', [ItemController::class, 'update']);
-        Route::delete('/{id}', [ItemController::class, 'delete']);
-    }
-);

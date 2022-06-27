@@ -21,8 +21,7 @@
                         <h1 class="navbar-brand m-auto">URL SHORTENER</h1>
                     </nav>
                     <div class="card card-body">
-                        {{-- Showing Existing URL --}}
-                        <show-url-component></show-url-component>
+
                         <span class="msg"></span>
                         {{-- Generating new URL --}}
                         <url-short-component></url-short-component>

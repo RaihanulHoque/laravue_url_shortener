@@ -18,6 +18,14 @@
     },
     "dependencies": {
         "@vue/compiler-sfc": "^3.2.37",
-        "vue": "^3.2.36"
-    }
+        "vue": "^3.2.36",
+        "zlib": "^1.0.5"
+    },
+    "extra": {
+        "laravel": {
+          "dont-discover": [
+            "barryvdh/laravel-ide-helper"
+          ]
+        }
+      }
 }

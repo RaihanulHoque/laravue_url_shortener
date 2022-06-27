@@ -1,13 +1,40 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Item;
+use App\Models\UrlShorter;
 use Illuminate\Http\Request;
 use illuminate\Support\Carbon;
-class ItemController extends Controller
+use AshAllenDesign\ShortURL\Facades\ShortURL;
+
+class UrlShorterController extends Controller
 {
-    public function addItem(){
-        return "API is working....";
+
+    public function addUrl(Request $request){
+        $url = $request->url;
+        $existingUrl = UrlShorter::where('destination_url' , '=', $url)->first();
+        if($existingUrl === null){
+            $shortURLObject = ShortURL::destinationUrl($request->url)->make();
+            $shortURL = $shortURLObject->default_short_url;
+            return $shortURL;
+        }else{
+            return $existingUrl;
+        }
+        return $url;
+    }
+
+    /**
+     * Fining a destination URL by the HASH code
+     */
+    public function getDestinationUrl($hash){
+        // return "working..."; exit();
+        $urlQuery = UrlShorter::where('url_key' , '=', $hash)->first();
+        if($urlQuery){
+            $destinationUrl = $urlQuery->destination_url;
+            return $destinationUrl;
+        }else{
+            return null;
+        }
+
     }
     /**
      * Display a listing of the resource.
@@ -16,7 +43,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        return Item::orderBy('created_at', 'DESC')->get();
+        return UrlShorter::orderBy('id', 'DESC')->get();
     }
 
     /**
@@ -37,11 +64,7 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        $newItem = new Item;
-        $newItem->name = $request->item['name'];
-        $newItem->save();
-
-        return $newItem;
+        //
     }
 
     /**
@@ -75,16 +98,7 @@ class ItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $existingItem = Item::find($id);
-        if($existingItem){
-            $existingItem->completed = $request->item['completed'] ? true:false;
-            $existingItem->completed_at = $request->item['completed'] ? Carbon::now() : null;
-            $existingItem->save();
-
-            return $existingItem;
-        }
-
-        return "Item not found";
+        //
     }
 
     /**
@@ -95,12 +109,6 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
-        $existingItem = Item::find($id);
-        if($existingItem){
-            $existingItem->delete();
-            return "Item Deleted successfully!";
-        }
-
-        return "Item not found!";
+        //
     }
 }
