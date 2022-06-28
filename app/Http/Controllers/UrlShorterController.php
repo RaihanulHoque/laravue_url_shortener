@@ -30,7 +30,8 @@ class UrlShorterController extends Controller
         $urlQuery = UrlShorter::where('url_key' , '=', $hash)->first();
         if($urlQuery){
             $destinationUrl = $urlQuery->destination_url;
-            return $destinationUrl;
+            //return $destinationUrl;
+            return redirect()->away($destinationUrl);
         }else{
             return null;
         }
