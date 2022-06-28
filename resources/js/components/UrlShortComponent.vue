@@ -33,7 +33,6 @@ export default {
         return {
             url: {
                 destination_url: "",
-                shortenUrl: ""
             }
         };
     },
@@ -58,20 +57,28 @@ export default {
                 if (this.url.destination_url == "") {
                     return;
                 }
-                axios.post("api/add-url", {
-                    url: this.url.destination_url
-                })
-                .then(response => {
-                    if (goodResponseStatus.includes(response.status)) {
-                        this.url.destination_url = response.data.default_short_url;
-                        this.dest_url = response.data.destination_url;
-                        this.shortenUrl = response.data.default_short_url;
-                        console.log(response.data.default_short_url, "--- Getting response after submit");
+
+                const axios = require('axios');
+                const sendGetRequest = async () => {
+                    try {
+                        const resp = await axios.post('api/add-url', {
+                                            url: this.url.destination_url
+                                        })
+                                        .then(response => {
+                                            if (goodResponseStatus.includes(response.status)) {
+                                                this.url.destination_url = response.data.default_short_url;
+                                                this.dest_url = response.data.destination_url;
+                                                this.shortenUrl = response.data.default_short_url;
+                                                //console.log(response.data.default_short_url, "--- Getting response after submit");
+                                            }
+                                        });
+                    } catch (err) {
+                        // Handle Error Here
+                        console.error(err);
                     }
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+                };
+                sendGetRequest();
+
             }else{
                 alert("Please enter a valid URL!");
                 document.querySelector('#urlInput').focus();
